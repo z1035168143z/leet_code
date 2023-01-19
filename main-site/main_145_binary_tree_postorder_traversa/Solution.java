@@ -1,4 +1,4 @@
-package main_144_binary_tree_preorder_traversa;
+package main_145_binary_tree_postorder_traversa;
 
 import baseDomain.TreeNode;
 
@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
+ * 给你一棵二叉树的根节点 root ，返回其节点值的 后序遍历 。
  *
  * @author zzr
  * @date 2023/1/18 18:29
@@ -19,22 +19,29 @@ public class Solution {
         root.right = new TreeNode(2);
         root.right.left = new TreeNode(3);
 
-        System.out.println(new Solution().preorderTraversal(root));
+        System.out.println(new Solution().postorderTraversal(root));
     }
 
-    public List<Integer> preorderTraversal(TreeNode root) {
+    public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
         LinkedList<TreeNode> nodes = new LinkedList<>();
+        TreeNode preNode = null;
         while (root != null || !nodes.isEmpty()) {
             while (root != null) {
-                result.add(root.val);
-                if (root.right != null) {
-                    nodes.push(root.right);
-                }
+                nodes.push(root);
                 root = root.left;
             }
-            if (!nodes.isEmpty()) {
-                root = nodes.pop();
+            // 到这里，当前节点左节点已经为null
+            root = nodes.pop();
+            // 左右节点均为null了，可以记录当前节点 || 当前节点的右节点已经记录了
+            if (root.right == null || preNode == root.right) {
+                result.add(root.val);
+                preNode = root;
+                root = null;
+            } else {
+                // 当前节点入栈，需要先处理右节点
+                nodes.push(root);
+                root = root.right;
             }
         }
 
@@ -42,3 +49,4 @@ public class Solution {
     }
 
 }
+

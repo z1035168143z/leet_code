@@ -1,4 +1,4 @@
-package main_92_inary_tree_inorder_traversa;
+package main_92_binary_tree_inorder_traversa;
 
 import baseDomain.TreeNode;
 
@@ -24,12 +24,15 @@ public class Solution {
         List<Integer> result = new ArrayList<>();
         LinkedList<TreeNode> nodes = new LinkedList<>();
         while (root != null || !nodes.isEmpty()) {
+            // 一路向左
             while (root != null) {
                 nodes.add(root);
                 root = root.left;
             }
+            // 到这里，左节点为null或已经遍历过左节点
             root = nodes.pop();
             result.add(root.val);
+            // 存入当前节点后，处理右节点
             root = root.right;
         }
 
