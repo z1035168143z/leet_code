@@ -24,21 +24,25 @@ public class Solution {
 
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        LinkedList<TreeNode> nodes = new LinkedList<>();
-        while (root != null || !nodes.isEmpty()) {
-            while (root != null) {
-                // 先自己
-                result.add(root.val);
-                // 右节点加入队列
-                if (root.right != null) {
-                    nodes.push(root.right);
+        if (root == null) {
+            return result;
+        }
+        LinkedList<Object> nodes = new LinkedList<>();
+        nodes.push(root);
+
+        while (!nodes.isEmpty()) {
+            Object obj = nodes.pop();
+            if (obj instanceof Integer) {
+                result.add((Integer) obj);
+            } else {
+                TreeNode treeNode = (TreeNode) obj;
+                if (treeNode.right != null) {
+                    nodes.push(treeNode.right);
                 }
-                // 左节点
-                root = root.left;
-            }
-            // 不为空，存在未记录的右节点
-            if (!nodes.isEmpty()) {
-                root = nodes.pop();
+                if (treeNode.left != null) {
+                    nodes.push(treeNode.left);
+                }
+                nodes.push(treeNode.val);
             }
         }
 

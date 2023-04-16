@@ -1,6 +1,7 @@
 package main_145_binary_tree_postorder_traversa;
 
 import baseDomain.TreeNode;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,24 +25,25 @@ public class Solution {
 
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        LinkedList<TreeNode> nodes = new LinkedList<>();
-        TreeNode preNode = null;
-        while (root != null || !nodes.isEmpty()) {
-            while (root != null) {
-                nodes.push(root);
-                root = root.left;
-            }
-            // 到这里，当前节点左节点已经为null
-            root = nodes.pop();
-            // 左右节点均为null了，可以记录当前节点 || 当前节点的右节点已经记录了
-            if (root.right == null || preNode == root.right) {
-                result.add(root.val);
-                preNode = root;
-                root = null;
+        if (root == null) {
+            return result;
+        }
+        LinkedList<Object> nodes = new LinkedList<>();
+        nodes.push(root);
+
+        while (!nodes.isEmpty()) {
+            Object obj = nodes.pop();
+            if (obj instanceof Integer) {
+                result.add((Integer) obj);
             } else {
-                // 当前节点入栈，需要先处理右节点
-                nodes.push(root);
-                root = root.right;
+                TreeNode treeNode = (TreeNode) obj;
+                nodes.push(treeNode.val);
+                if (treeNode.right != null) {
+                    nodes.push(treeNode.right);
+                }
+                if (treeNode.left != null) {
+                    nodes.push(treeNode.left);
+                }
             }
         }
 

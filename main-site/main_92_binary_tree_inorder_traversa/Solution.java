@@ -22,18 +22,26 @@ public class Solution {
 
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        LinkedList<TreeNode> nodes = new LinkedList<>();
-        while (root != null || !nodes.isEmpty()) {
-            // 一路向左
-            while (root != null) {
-                nodes.add(root);
-                root = root.left;
+        if (root == null) {
+            return result;
+        }
+        Deque<Object> dequeue = new LinkedList<>();
+        dequeue.offer(root);
+
+        while (!dequeue.isEmpty()) {
+            Object node = dequeue.pop();
+            if (node instanceof Integer) {
+                result.add((Integer) node);
+            } else {
+                TreeNode treeNode = (TreeNode) node;
+                if (treeNode.right != null) {
+                    dequeue.push(treeNode.right);
+                }
+                dequeue.push(treeNode.val);
+                if (treeNode.left != null) {
+                    dequeue.push(treeNode.left);
+                }
             }
-            // 到这里，左节点为null或已经遍历过左节点
-            root = nodes.pop();
-            result.add(root.val);
-            // 存入当前节点后，处理右节点
-            root = root.right;
         }
 
         return result;
